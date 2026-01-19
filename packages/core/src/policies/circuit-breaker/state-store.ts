@@ -49,16 +49,14 @@ export class MemoryStateStore implements CircuitBreakerStateStore {
     private readonly successThreshold: number,
   ) {}
 
-  getState(): Promise<CircuitState> {
+  async getState(): Promise<CircuitState> {
     if (this.state === 'open') {
       const now = Date.now();
       if (now >= this.openedAt + this.breakDuration) {
-        // Transition logic should ideally be here or caller?
-        // Since get is async, we can mutate state here (lazy evaluation)
-        this.setState('halfOpen', crypto.randomUUID());
+        await this.setState('halfOpen', crypto.randomUUID());
       }
     }
-    return Promise.resolve(this.state);
+    return this.state;
   }
 
   recordSuccess(correlationId: string): Promise<boolean> {
@@ -89,7 +87,7 @@ export class MemoryStateStore implements CircuitBreakerStateStore {
     return Promise.resolve(false);
   }
 
-  setState(state: CircuitState, _correlationId: string): void {
+  setState(state: CircuitState, _correlationId: string): Promise<void> {
     if (state === 'closed') {
       this.consecutiveFailures = 0;
       this.consecutiveSuccesses = 0;
@@ -97,10 +95,11 @@ export class MemoryStateStore implements CircuitBreakerStateStore {
       this.openedAt = Date.now();
     }
     this.state = state;
+    return Promise.resolve();
   }
 
-  getOpenedAt(): number | undefined {
-    return this.state === 'open' ? this.openedAt : undefined;
+  getOpenedAt(): Promise<number | undefined> {
+    return Promise.resolve(this.state === 'open' ? this.openedAt : undefined);
   }
 
   private openCircuit(correlationId: string): void {
