@@ -80,4 +80,4 @@ This project is licensed under the MIT License. See the LICENSE file for details
 
 ---
 
-For more information, visit the [Polly-TS GitHub repository](https://github.com/your-repo-link).
+For more information, visit the [Polly-TS GitHub repository](https://github.com/jbt95/polly-ts).
