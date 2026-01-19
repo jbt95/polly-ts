@@ -59,11 +59,11 @@ export class MemoryStateStore implements CircuitBreakerStateStore {
     return this.state;
   }
 
-  recordSuccess(correlationId: string): Promise<boolean> {
+  async recordSuccess(correlationId: string): Promise<boolean> {
     if (this.state === 'halfOpen') {
       this.consecutiveSuccesses++;
       if (this.consecutiveSuccesses >= this.successThreshold) {
-        this.setState('closed', correlationId);
+        await this.setState('closed', correlationId);
         return Promise.resolve(true);
       }
     } else {
@@ -72,15 +72,15 @@ export class MemoryStateStore implements CircuitBreakerStateStore {
     return Promise.resolve(false);
   }
 
-  recordFailure(_correlationId: string): Promise<boolean> {
+  async recordFailure(_correlationId: string): Promise<boolean> {
     this.consecutiveFailures++;
     this.consecutiveSuccesses = 0;
 
     if (this.state === 'halfOpen') {
-      this.openCircuit(_correlationId);
+      await this.openCircuit(_correlationId);
       return Promise.resolve(true);
     } else if (this.state === 'closed' && this.consecutiveFailures >= this.failureThreshold) {
-      this.openCircuit(_correlationId);
+      await this.openCircuit(_correlationId);
       return Promise.resolve(true);
     }
 
@@ -102,7 +102,7 @@ export class MemoryStateStore implements CircuitBreakerStateStore {
     return Promise.resolve(this.state === 'open' ? this.openedAt : undefined);
   }
 
-  private openCircuit(correlationId: string): void {
-    this.setState('open', correlationId);
+  private async openCircuit(correlationId: string): Promise<void> {
+    await this.setState('open', correlationId);
   }
 }
