@@ -1,3 +1,4 @@
+import { randomUUID } from 'crypto';
 import type { IPolicy, PolicyOptions } from '../../types/policy';
 import type { ExecutionContext } from '../../types/context';
 import type { SuccessEventArgs, FailureEventArgs, PolicyEvent } from '../../types/events';
@@ -124,7 +125,7 @@ export class RetryPolicy<TResult = unknown> implements IPolicy<TResult> {
   ): Promise<T> {
     const abortController = new AbortController();
     const startTime = Date.now();
-    const correlationId = crypto.randomUUID();
+    const correlationId = randomUUID();
 
     // Link external signal to internal controller
     if (signal) {

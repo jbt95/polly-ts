@@ -1,3 +1,4 @@
+import { randomUUID } from 'crypto';
 import type { IPolicy, PolicyOptions } from '../../types/policy';
 import type { ExecutionContext } from '../../types/context';
 import type { SuccessEventArgs, FailureEventArgs, PolicyEvent } from '../../types/events';
@@ -69,7 +70,7 @@ export class TimeoutPolicy<TResult = unknown> implements IPolicy<TResult> {
     signal?: AbortSignal,
   ): Promise<T> {
     const startTime = Date.now();
-    const correlationId = crypto.randomUUID();
+    const correlationId = randomUUID();
 
     // Create internal abort controller for timeout
     const timeoutController = new AbortController();

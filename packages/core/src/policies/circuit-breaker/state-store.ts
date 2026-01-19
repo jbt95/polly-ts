@@ -1,3 +1,4 @@
+import { randomUUID } from 'crypto';
 import type { CircuitState } from './circuit-breaker-policy';
 
 /**
@@ -53,7 +54,7 @@ export class MemoryStateStore implements CircuitBreakerStateStore {
     if (this.state === 'open') {
       const now = Date.now();
       if (now >= this.openedAt + this.breakDuration) {
-        await this.setState('halfOpen', crypto.randomUUID());
+        await this.setState('halfOpen', randomUUID());
       }
     }
     return this.state;

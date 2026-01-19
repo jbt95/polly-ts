@@ -1,3 +1,4 @@
+import { randomUUID } from 'crypto';
 import type { IPolicy, PolicyOptions } from '../../types/policy';
 import type { ExecutionContext } from '../../types/context';
 import type { SuccessEventArgs, FailureEventArgs, PolicyEvent } from '../../types/events';
@@ -106,14 +107,14 @@ export class CircuitBreakerPolicy<TResult = unknown> implements IPolicy<TResult>
    * Manually isolate the circuit (force open).
    */
   async isolate(): Promise<void> {
-    await this.transitionTo('isolated', crypto.randomUUID());
+    await this.transitionTo('isolated', randomUUID());
   }
 
   /**
    * Reset the circuit to closed state.
    */
   async reset(): Promise<void> {
-    await this.transitionTo('closed', crypto.randomUUID());
+    await this.transitionTo('closed', randomUUID());
   }
 
   async execute<T extends TResult>(
@@ -121,7 +122,7 @@ export class CircuitBreakerPolicy<TResult = unknown> implements IPolicy<TResult>
     signal?: AbortSignal,
   ): Promise<T> {
     const startTime = Date.now();
-    const correlationId = crypto.randomUUID();
+    const correlationId = randomUUID();
 
     // Check current state
     const currentState = await this.getState();

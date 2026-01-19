@@ -1,3 +1,4 @@
+import { randomUUID } from 'crypto';
 import type {
   IPolicy,
   PolicyOptions,
@@ -68,7 +69,7 @@ export class ChaosPolicy implements IPolicy {
 
     const context = createExecutionContext({
       signal: signal ?? new AbortController().signal,
-      correlationId: crypto.randomUUID(),
+      correlationId: randomUUID(),
       startTime: Date.now(),
       attemptNumber: 1,
     });

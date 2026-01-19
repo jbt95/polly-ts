@@ -1,3 +1,4 @@
+import { randomUUID } from 'crypto';
 import type { IPolicy, PolicyOptions } from '../../types/policy';
 import type { ExecutionContext } from '../../types/context';
 import type { SuccessEventArgs, FailureEventArgs, PolicyEvent } from '../../types/events';
@@ -80,7 +81,7 @@ export class FallbackPolicy<TResult = unknown> implements IPolicy<TResult> {
     signal?: AbortSignal,
   ): Promise<T> {
     const startTime = Date.now();
-    const correlationId = crypto.randomUUID();
+    const correlationId = randomUUID();
 
     if (signal?.aborted) {
       throw signal.reason as Error;

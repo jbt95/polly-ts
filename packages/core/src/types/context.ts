@@ -1,3 +1,5 @@
+import { randomUUID } from 'crypto';
+
 /**
  * Context passed to every policy execution.
  * Contains metadata about the current execution attempt.
@@ -40,7 +42,7 @@ export function createExecutionContext(
 ): ExecutionContext {
   const context: ExecutionContext = {
     signal: overrides.signal ?? new AbortController().signal,
-    correlationId: overrides.correlationId ?? crypto.randomUUID(),
+    correlationId: overrides.correlationId ?? randomUUID(),
     attemptNumber: overrides.attemptNumber ?? 1,
     startTime: overrides.startTime ?? Date.now(),
   };

@@ -1,3 +1,4 @@
+import { randomUUID } from 'crypto';
 import type { IPolicy, PolicyOptions, ExecutionContext } from '../../types';
 import {
   PolicyEventEmitter,
@@ -68,7 +69,7 @@ export class CachePolicy implements IPolicy {
     fn: (context: ExecutionContext) => Promise<T> | T,
     signal?: AbortSignal,
   ): Promise<T> {
-    const correlationId = crypto.randomUUID();
+    const correlationId = randomUUID();
     const startTime = Date.now();
 
     const abortController = new AbortController();
