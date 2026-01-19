@@ -15,16 +15,6 @@ import type {
   FailureEventArgs,
   PolicyEvent,
 } from 'polly-ts-core';
-// We need to import PolicyEventEmitter but it's not exported from polly-ts-core top level?
-// I exported events types but not class PolicyEventEmitter?
-// Let me check core exports.
-// If not exported, I implement TelemetryPolicy simply wrapping execute.
-// But I need to implement onSuccess/onFailure. I can delegate to inner policy.
-// But TelemetryPolicy itself is a policy, so it should have its own events or pass-through?
-// Usually listeners subscribe to the *wrapper* or the *inner*.
-// If I wrap, I should forward the inner events? Or just expose them?
-// IPolicy interface requires onSuccess/onFailure properties.
-// I can just re-expose inner.onSuccess.
 
 export interface TelemetryOptions {
   /**
@@ -48,8 +38,18 @@ export interface TelemetryOptions {
   recordSpans?: boolean;
 }
 
+/**
+ * A policy that adds telemetry (metrics and tracing) to an inner policy.
+ * This policy wraps another policy and records metrics and spans for its execution.
+ *
+ * @template TResult The type of the result returned by the policy.
+ */
 export class TelemetryPolicy<TResult = unknown> implements IPolicy<TResult> {
+  /**
+   * The name of the telemetry policy, which includes the name of the inner policy.
+   */
   readonly name: string;
+
   private readonly inner: IPolicy<TResult>;
   private readonly tracer: Tracer;
   private readonly meter: Meter;
@@ -62,6 +62,12 @@ export class TelemetryPolicy<TResult = unknown> implements IPolicy<TResult> {
   private readonly failureCounter: Counter;
   private readonly durationHistogram: Histogram;
 
+  /**
+   * Creates a new TelemetryPolicy instance.
+   *
+   * @param inner The inner policy to wrap with telemetry.
+   * @param options Configuration options for telemetry.
+   */
   constructor(inner: IPolicy<TResult>, options: TelemetryOptions = {}) {
     this.inner = inner;
     this.name = `Telemetry(${inner.name})`;
@@ -98,15 +104,28 @@ export class TelemetryPolicy<TResult = unknown> implements IPolicy<TResult> {
     });
   }
 
-  // Pass-through events
+  /**
+   * Event triggered on successful execution of the inner policy.
+   */
   get onSuccess(): PolicyEvent<SuccessEventArgs> {
     return this.inner.onSuccess;
   }
 
+  /**
+   * Event triggered on failed execution of the inner policy.
+   */
   get onFailure(): PolicyEvent<FailureEventArgs> {
     return this.inner.onFailure;
   }
 
+  /**
+   * Executes the provided function within the context of the telemetry policy.
+   *
+   * @param fn The function to execute, which represents the operation to protect.
+   * @param signal An optional AbortSignal to cancel the operation.
+   * @returns The result of the function execution.
+   * @throws Any error thrown by the inner policy or the provided function.
+   */
   async execute<T extends TResult>(
     fn: (context: ExecutionContext) => Promise<T> | T,
     signal?: AbortSignal,
@@ -165,6 +184,14 @@ export class TelemetryPolicy<TResult = unknown> implements IPolicy<TResult> {
     });
   }
 
+  /**
+   * Executes the provided function with metrics recording only, without spans.
+   *
+   * @param fn The function to execute, which represents the operation to protect.
+   * @param signal An optional AbortSignal to cancel the operation.
+   * @returns The result of the function execution.
+   * @throws Any error thrown by the inner policy or the provided function.
+   */
   private async executeWithMetricsOnly<T extends TResult>(
     fn: (context: ExecutionContext) => Promise<T> | T,
     signal?: AbortSignal,

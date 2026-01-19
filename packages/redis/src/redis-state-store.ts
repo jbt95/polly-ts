@@ -1,15 +1,46 @@
 import type { Redis } from 'ioredis';
 import type { CircuitBreakerStateStore, CircuitState } from 'polly-ts-core';
 
+/**
+ * Options for configuring the RedisStateStore.
+ */
 export interface RedisStateStoreOptions {
+  /**
+   * The Redis client instance to use.
+   */
   client: Redis;
+
+  /**
+   * Optional prefix for Redis keys. Default: 'polly:cb'.
+   */
   prefix?: string;
+
+  /**
+   * The unique name of the Circuit Breaker.
+   */
   name: string;
+
+  /**
+   * The number of failures required to open the Circuit Breaker.
+   */
   failThreshold: number;
+
+  /**
+   * The duration (in milliseconds) the Circuit Breaker remains open.
+   */
   breakDuration: number;
+
+  /**
+   * The number of successes required to close the Circuit Breaker from half-open state.
+   */
   successThreshold: number;
 }
 
+/**
+ * A Redis-backed state store for managing the state of a Circuit Breaker.
+ * This implementation uses Redis to persist and manage the state transitions
+ * of a Circuit Breaker, ensuring distributed consistency.
+ */
 export class RedisStateStore implements CircuitBreakerStateStore {
   private readonly redis: Redis;
   private readonly key: string;
@@ -17,6 +48,11 @@ export class RedisStateStore implements CircuitBreakerStateStore {
   private readonly breakDuration: number;
   private readonly successThreshold: number;
 
+  /**
+   * Creates a new RedisStateStore instance.
+   *
+   * @param options Configuration options for the Redis state store.
+   */
   constructor(options: RedisStateStoreOptions) {
     this.redis = options.client;
     this.key = `${options.prefix ?? 'polly:cb'}:${options.name}`;
@@ -25,6 +61,11 @@ export class RedisStateStore implements CircuitBreakerStateStore {
     this.successThreshold = options.successThreshold;
   }
 
+  /**
+   * Retrieves the current state of the Circuit Breaker.
+   *
+   * @returns The current state of the Circuit Breaker ('closed', 'open', or 'halfOpen').
+   */
   async getState(): Promise<CircuitState> {
     const now = Date.now();
     // Lua script to check state and transition open -> halfOpen if needed
@@ -48,6 +89,12 @@ export class RedisStateStore implements CircuitBreakerStateStore {
     return state as CircuitState;
   }
 
+  /**
+   * Records a successful execution and updates the Circuit Breaker state if necessary.
+   *
+   * @param _correlationId The correlation ID for the operation (not used in this implementation).
+   * @returns `true` if the state transitioned to 'closed', otherwise `false`.
+   */
   async recordSuccess(_correlationId: string): Promise<boolean> {
     const script = `
       local key = KEYS[1]
@@ -74,6 +121,12 @@ export class RedisStateStore implements CircuitBreakerStateStore {
     return result === 1;
   }
 
+  /**
+   * Records a failed execution and updates the Circuit Breaker state if necessary.
+   *
+   * @param _correlationId The correlation ID for the operation (not used in this implementation).
+   * @returns `true` if the state transitioned to 'open', otherwise `false`.
+   */
   async recordFailure(_correlationId: string): Promise<boolean> {
     const now = Date.now();
     const script = `
@@ -104,6 +157,12 @@ export class RedisStateStore implements CircuitBreakerStateStore {
     return result === 1;
   }
 
+  /**
+   * Sets the state of the Circuit Breaker.
+   *
+   * @param state The new state to set ('closed', 'open', or 'halfOpen').
+   * @param _correlationId The correlation ID for the operation (not used in this implementation).
+   */
   async setState(state: CircuitState, _correlationId: string): Promise<void> {
     const now = Date.now();
     const pipeline = this.redis.pipeline();
@@ -120,6 +179,11 @@ export class RedisStateStore implements CircuitBreakerStateStore {
     await pipeline.exec();
   }
 
+  /**
+   * Retrieves the timestamp (in milliseconds) when the Circuit Breaker was last opened.
+   *
+   * @returns The timestamp when the Circuit Breaker was last opened, or `undefined` if not available.
+   */
   async getOpenedAt(): Promise<number | undefined> {
     const openedAt = await this.redis.hget(this.key, 'openedAt');
     return openedAt ? parseInt(openedAt, 10) : undefined;

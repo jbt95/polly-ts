@@ -1,6 +1,6 @@
 {
   "name": "polly-ts-telemetry",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Telemetry integration for Polly-TS",
   "type": "module",
   "main": "./dist/index.js",

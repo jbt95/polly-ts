@@ -28,8 +28,16 @@ export interface ChaosPolicyOptions extends PolicyOptions {
   latencyMs?: number;
 }
 
+/**
+ * A policy that introduces chaos into the execution of a function.
+ * This can be used for testing the resilience of applications by injecting faults or latency.
+ */
 export class ChaosPolicy implements IPolicy {
+  /**
+   * The name of the policy.
+   */
   readonly name: string;
+
   private readonly injectionRate: number;
   private readonly fault: Error;
   private readonly latencyMs: number | undefined;
@@ -37,9 +45,24 @@ export class ChaosPolicy implements IPolicy {
   private readonly successEmitter = new PolicyEventEmitter<SuccessEventArgs>();
   private readonly failureEmitter = new PolicyEventEmitter<FailureEventArgs>();
 
+  /**
+   * Event triggered on successful execution of the function.
+   */
   readonly onSuccess = this.successEmitter.subscribe;
+
+  /**
+   * Event triggered on failed execution of the function.
+   */
   readonly onFailure = this.failureEmitter.subscribe;
 
+  /**
+   * Creates a new ChaosPolicy instance.
+   *
+   * @param options Configuration options for the chaos policy.
+   * @param options.injectionRate Probability of injecting a fault (0.0 to 1.0). Default: 0.1 (10%).
+   * @param options.fault The error to throw when a fault is injected. Default: `Error('Chaos injected')`.
+   * @param options.latencyMs The latency to inject in milliseconds. Default: `undefined` (no latency).
+   */
   constructor(options: ChaosPolicyOptions = {}) {
     this.name = options.name ?? 'ChaosPolicy';
     this.injectionRate = options.injectionRate ?? 0.1;
@@ -47,6 +70,14 @@ export class ChaosPolicy implements IPolicy {
     this.latencyMs = options.latencyMs;
   }
 
+  /**
+   * Executes the provided function, potentially injecting chaos (faults or latency).
+   *
+   * @param fn The function to execute, which represents the operation to protect.
+   * @param signal An optional AbortSignal to cancel the operation.
+   * @returns The result of the function execution.
+   * @throws The injected fault or any error thrown by the provided function.
+   */
   async execute<T>(
     fn: (context: ExecutionContext) => Promise<T> | T,
     signal?: AbortSignal,

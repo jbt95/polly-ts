@@ -194,15 +194,41 @@ fastify.get('/api/data', async () => {
 ### NestJS
 
 ```typescript
-import { Controller, Get } from '@nestjs/common';
-import { UsePolicy } from 'polly-ts-nestjs';
+import { Module, Controller, Get } from '@nestjs/common';
+import { UsePolicy, PollyModule } from 'polly-ts-nestjs';
+import { RetryPolicy, CircuitBreakerPolicy, pipeline } from 'polly-ts-core';
+
+// Define resilience policies
+const retryPolicy = new RetryPolicy({
+  maxAttempts: 3,
+  backoff: { type: 'exponential', initialDelay: 100, maxDelay: 1000 },
+});
+
+const circuitBreakerPolicy = new CircuitBreakerPolicy({
+  failureThreshold: 5,
+  breakDuration: 30000, // 30 seconds
+});
+
+const combinedPolicy = pipeline(circuitBreakerPolicy, retryPolicy);
+
+@Module({
+  imports: [
+    PollyModule.register({
+      policies: {
+        'resilience-strategy': combinedPolicy,
+      },
+    }),
+  ],
+  controllers: [DataController],
+})
+export class AppModule {}
 
 @Controller('data')
 export class DataController {
   @Get()
-  @UsePolicy('my-retry-policy')
+  @UsePolicy('resilience-strategy')
   async getData() {
-    return this.service.fetchData();
+    /* your code */
   }
 }
 ```

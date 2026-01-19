@@ -1,3 +1,8 @@
+/**
+ * An interceptor for applying Polly-TS resilience policies to NestJS route handlers.
+ * This interceptor retrieves the specified policy from the PollyService and applies it to the route handler.
+ */
+
 import {
   Injectable,
   type NestInterceptor,
@@ -20,6 +25,13 @@ export class PollyInterceptor implements NestInterceptor {
     @Inject('POLLY_POLICIES') private readonly policies: Map<string, IPolicy>,
   ) {}
 
+  /**
+   * Intercepts the request and applies the specified Polly policy to the route handler.
+   *
+   * @param context The execution context of the route handler.
+   * @param next The next handler in the request pipeline.
+   * @returns An observable that resolves with the result of the route handler.
+   */
   intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
     const policyName = this.reflector.getAllAndOverride<string>(POLLY_POLICY_KEY, [
       context.getHandler(),
