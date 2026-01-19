@@ -7,28 +7,102 @@ import {
 } from '../../types/events';
 import { createExecutionContext } from '../../types/context';
 
+/**
+ * Configuration options for the HedgingPolicy.
+ *
+ * @example
+ * ```typescript
+ * const policy = new HedgingPolicy({
+ *   name: 'MyHedgingPolicy',
+ *   delayMs: 100,  // Wait 100ms before launching hedge
+ *   maxHedges: 2,  // Launch up to 2 additional attempts
+ * });
+ * ```
+ */
 export interface HedgingPolicyOptions extends PolicyOptions {
   /**
-   * Delay before triggering a hedged attempt in milliseconds.
-   * If 0, runs in parallel immediately.
-   * Default: 0
+   * Delay in milliseconds before triggering each hedged attempt.
+   *
+   * - If `0`, all hedged attempts are launched immediately in parallel with the primary.
+   * - If greater than `0`, hedged attempts are staggered: the first hedge launches after
+   *   `delayMs`, the second after `2 * delayMs`, etc.
+   *
+   * @default 0
    */
   delayMs?: number;
 
   /**
-   * Maximum number of hedged attempts to spawn (in addition to primary).
-   * Default: 1
+   * Maximum number of hedged (additional) attempts to spawn beyond the primary attempt.
+   *
+   * Total concurrent attempts will be `1 + maxHedges`. For example, if `maxHedges` is 2,
+   * up to 3 attempts may run concurrently (1 primary + 2 hedges).
+   *
+   * @default 1
    */
   maxHedges?: number;
 }
 
+/**
+ * Event arguments emitted when a hedged attempt is launched.
+ */
 export interface HedgeEventArgs {
-  attemptNumber: number;
-  correlationId: string;
+  /**
+   * The attempt number of the hedged request (2 for first hedge, 3 for second, etc.).
+   * The primary attempt is number 1 and does not trigger this event.
+   */
+  readonly attemptNumber: number;
+
+  /**
+   * Unique identifier correlating all attempts within this execution.
+   */
+  readonly correlationId: string;
 }
 
+/**
+ * A resilience policy that reduces tail latency by launching parallel "hedged" requests.
+ *
+ * Hedging is a latency-reduction technique where additional requests are sent if the
+ * primary request hasn't completed within a specified time. The first successful
+ * response wins, and all other in-flight requests are cancelled.
+ *
+ * **Use Cases:**
+ * - Reducing P99 latency for read operations
+ * - Fan-out requests to multiple replicas
+ * - Speculative execution for idempotent operations
+ *
+ * **Important:** Only use hedging for idempotent operations, as the same request
+ * may be executed multiple times concurrently.
+ *
+ * @example
+ * ```typescript
+ * // Launch a hedge after 100ms if primary hasn't completed
+ * const policy = new HedgingPolicy({
+ *   delayMs: 100,
+ *   maxHedges: 1,
+ * });
+ *
+ * const result = await policy.execute(async (ctx) => {
+ *   return await fetchFromReplica(ctx.signal);
+ * });
+ * ```
+ *
+ * @example
+ * ```typescript
+ * // Immediate parallel execution (fan-out)
+ * const policy = new HedgingPolicy({
+ *   delayMs: 0,    // Launch all immediately
+ *   maxHedges: 2,  // 3 total parallel requests
+ * });
+ *
+ * policy.onHedge((args) => {
+ *   console.log(`Hedge attempt ${args.attemptNumber} launched`);
+ * });
+ * ```
+ */
 export class HedgingPolicy implements IPolicy {
+  /** The name of this policy instance, used for logging and debugging. */
   readonly name: string;
+
   private readonly delayMs: number;
   private readonly maxHedges: number;
 
@@ -36,16 +110,60 @@ export class HedgingPolicy implements IPolicy {
   private readonly failureEmitter = new PolicyEventEmitter<FailureEventArgs>();
   private readonly hedgeEmitter = new PolicyEventEmitter<HedgeEventArgs>();
 
+  /**
+   * Event emitted when any attempt completes successfully.
+   * Only fires once per execution (for the winning attempt).
+   */
   readonly onSuccess = this.successEmitter.subscribe;
+
+  /**
+   * Event emitted when all attempts (primary + hedges) have failed.
+   * Contains the error from the last failing attempt.
+   */
   readonly onFailure = this.failureEmitter.subscribe;
+
+  /**
+   * Event emitted when a hedged attempt is launched.
+   * Does not fire for the primary attempt (attempt 1).
+   */
   readonly onHedge = this.hedgeEmitter.subscribe;
 
+  /**
+   * Creates a new HedgingPolicy instance.
+   *
+   * @param options - Configuration options for the hedging behavior.
+   */
   constructor(options: HedgingPolicyOptions = {}) {
     this.name = options.name ?? 'HedgingPolicy';
     this.delayMs = options.delayMs ?? 0;
     this.maxHedges = options.maxHedges ?? 1;
   }
 
+  /**
+   * Executes an operation with hedging support.
+   *
+   * Launches the primary attempt immediately, then spawns hedged attempts according
+   * to the configured delay and maxHedges settings. Returns the result of the first
+   * successful attempt and cancels all remaining in-flight requests.
+   *
+   * @typeParam T - The return type of the operation.
+   * @param fn - The operation to execute. Receives an ExecutionContext with an AbortSignal
+   *             that will be triggered if another attempt wins or the policy is cancelled.
+   * @param signal - Optional AbortSignal to cancel all attempts externally.
+   * @returns The result from the first successful attempt.
+   * @throws The error from the last attempt if all attempts fail.
+   *
+   * @example
+   * ```typescript
+   * const result = await policy.execute(async (ctx) => {
+   *   // Check signal for cancellation
+   *   if (ctx.signal.aborted) throw new Error('Cancelled');
+   *
+   *   const response = await fetch(url, { signal: ctx.signal });
+   *   return response.json();
+   * });
+   * ```
+   */
   async execute<T>(
     fn: (context: ExecutionContext) => Promise<T> | T,
     signal?: AbortSignal,
