@@ -1,0 +1,43 @@
+{
+  "name": "@polly-ts/redis",
+  "version": "0.1.0",
+  "description": "Redis integration for Polly-TS",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest",
+    "lint": "eslint src/ --fix",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [
+    "polly",
+    "resilience",
+    "redis",
+    "distributed",
+    "circuit-breaker",
+    "typescript"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@polly-ts/core": "workspace:*",
+    "ioredis": "^5.0.0"
+  },
+  "devDependencies": {
+    "ioredis-mock": "^8.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "name": "@polly-ts/telemetry",
+  "version": "0.1.0",
+  "description": "Telemetry integration for Polly-TS",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest",
+    "lint": "eslint src/ --fix",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [
+    "polly",
+    "resilience",
+    "telemetry",
+    "opentelemetry",
+    "metrics",
+    "typescript"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@polly-ts/core": "workspace:*"
+  },
+  "devDependencies": {
+    "@opentelemetry/api": "^1.9.0"
+  },
+  "peerDependencies": {
+    "@opentelemetry/api": "^1.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

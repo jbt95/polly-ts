@@ -1,0 +1,38 @@
+{
+  "name": "@polly-ts/http",
+  "version": "0.1.0",
+  "description": "HTTP fetch wrapper for Polly-TS",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest",
+    "lint": "eslint src/ --fix",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [
+    "polly",
+    "resilience",
+    "http",
+    "fetch",
+    "typescript"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@polly-ts/core": "workspace:*"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

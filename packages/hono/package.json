@@ -1,0 +1,44 @@
+{
+  "name": "@polly-ts/hono",
+  "version": "0.1.0",
+  "description": "Hono middleware for Polly-TS",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest",
+    "lint": "eslint src/ --fix",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [
+    "polly",
+    "resilience",
+    "hono",
+    "middleware",
+    "typescript"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@polly-ts/core": "workspace:*"
+  },
+  "peerDependencies": {
+    "hono": "^3.0.0 || ^4.0.0"
+  },
+  "devDependencies": {
+    "hono": "^4.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

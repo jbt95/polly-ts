@@ -1,0 +1,54 @@
+{
+  "name": "@polly-ts/nestjs",
+  "version": "0.1.0",
+  "description": "NestJS integration for Polly-TS",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest",
+    "lint": "eslint src/ --fix",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [
+    "polly",
+    "resilience",
+    "nestjs",
+    "interceptor",
+    "decorator",
+    "typescript"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@polly-ts/core": "workspace:*"
+  },
+  "peerDependencies": {
+    "@nestjs/common": "^8.0.0 || ^9.0.0 || ^10.0.0",
+    "@nestjs/core": "^8.0.0 || ^9.0.0 || ^10.0.0",
+    "rxjs": "^7.0.0"
+  },
+  "devDependencies": {
+    "@nestjs/common": "^10.0.0",
+    "@nestjs/core": "^10.0.0",
+    "@nestjs/platform-express": "^11.1.12",
+    "@nestjs/testing": "^10.0.0",
+    "@types/supertest": "^6.0.3",
+    "reflect-metadata": "^0.2.0",
+    "rxjs": "^7.8.0",
+    "supertest": "^7.2.2"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
