@@ -150,6 +150,72 @@ const fallback = new FallbackPolicy({
 });
 ```
 
+### Policy Wrapping with `pipeline`
+
+The `pipeline` function in polly-ts allows you to compose multiple resilience policies into a single, cohesive strategy. This is particularly useful when you want to apply multiple resilience techniques (e.g., retries, circuit breakers, timeouts) in a specific order.
+
+#### How It Works
+
+The `pipeline` function takes a list of policies and wraps them in such a way that the first policy in the list becomes the outermost policy, and the last policy becomes the innermost. When the composed policy is executed, the outermost policy delegates to the next policy in the chain, and so on, until the innermost policy executes the actual operation.
+
+For example, if you create a pipeline with a retry policy, a circuit breaker policy, and a timeout policy:
+
+```typescript
+const strategy = pipeline(retryPolicy, circuitBreakerPolicy, timeoutPolicy);
+```
+
+The execution flow will look like this:
+
+1. The `retryPolicy` is the outermost policy. It will handle retries if the operation fails.
+2. The `retryPolicy` delegates to the `circuitBreakerPolicy`, which will check if the circuit is open or closed.
+3. The `circuitBreakerPolicy` delegates to the `timeoutPolicy`, which enforces a time limit on the operation.
+4. Finally, the `timeoutPolicy` executes the actual operation.
+
+If any policy in the chain decides to handle the operation (e.g., the circuit breaker opens, or the timeout is exceeded), the execution stops, and the result or error is returned.
+
+#### ASCII Diagram
+
+Here’s an ASCII diagram to illustrate the flow:
+
+```
++-------------------+
+|   Retry Policy    |
++-------------------+
+         |
+         v
++-------------------+
+| Circuit Breaker   |
++-------------------+
+         |
+         v
++-------------------+
+|   Timeout Policy  |
++-------------------+
+         |
+         v
++-------------------+
+|   Actual Operation|
++-------------------+
+```
+
+#### Example
+
+```typescript
+import { RetryPolicy, CircuitBreakerPolicy, TimeoutPolicy, pipeline } from 'polly-ts-core';
+
+const retryPolicy = new RetryPolicy({ maxAttempts: 3 });
+const circuitBreakerPolicy = new CircuitBreakerPolicy({ failureThreshold: 5 });
+const timeoutPolicy = new TimeoutPolicy({ timeoutMs: 5000 });
+
+const strategy = pipeline(retryPolicy, circuitBreakerPolicy, timeoutPolicy);
+
+const result = await strategy.execute(async () => {
+  return fetch('https://api.example.com/data');
+});
+```
+
+In this example, the `retryPolicy` will retry the operation up to 3 times if it fails, but only if the `circuitBreakerPolicy` allows it (i.e., the circuit is closed). The `timeoutPolicy` ensures that each attempt does not exceed 5 seconds.
+
 ## Framework Integrations
 
 Polly-TS provides dedicated packages for popular Node.js frameworks.
