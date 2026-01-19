@@ -35,6 +35,7 @@
     "ioredis": "^5.0.0"
   },
   "devDependencies": {
+    "@types/ioredis-mock": "^8.2.6",
     "ioredis-mock": "^8.0.0"
   },
   "publishConfig": {

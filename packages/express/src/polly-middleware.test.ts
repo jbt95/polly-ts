@@ -6,16 +6,17 @@ import { EventEmitter } from 'events';
 import type { Request, Response, NextFunction } from 'express';
 
 describe('polly middleware', () => {
-  let req: Partial<Request>;
-  let res: Partial<Response> & EventEmitter;
+  let req: Request;
+  let res: Response & EventEmitter;
   let next: NextFunction;
 
   beforeEach(() => {
-    req = {};
-    res = new EventEmitter();
-    res.statusCode = 200;
-    res.headersSent = false;
-    res.destroy = vi.fn();
+    req = {} as Request;
+    const mockRes = new EventEmitter() as Response & EventEmitter;
+    mockRes.statusCode = 200;
+    mockRes.headersSent = false;
+    mockRes.destroy = vi.fn();
+    res = mockRes;
     next = vi.fn();
   });
 

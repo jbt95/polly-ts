@@ -120,6 +120,9 @@ importers:
         specifier: ^5.0.0
         version: 5.9.2
     devDependencies:
+      '@types/ioredis-mock':
+        specifier: ^8.2.6
+        version: 8.2.6(ioredis@5.9.2)
       ioredis-mock:
         specifier: ^8.0.0
         version: 8.13.1(@types/ioredis-mock@8.2.6(ioredis@5.9.2))(ioredis@5.9.2)
