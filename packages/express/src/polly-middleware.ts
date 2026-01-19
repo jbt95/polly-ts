@@ -1,5 +1,5 @@
 import type { Request, Response, NextFunction, RequestHandler } from 'express';
-import type { IPolicy } from '@polly-ts/core';
+import type { IPolicy } from 'polly-ts-core';
 
 /**
  * Metadata key for Polly Context attached to the request.

@@ -1,5 +1,5 @@
 import type { FastifyRequest, FastifyReply } from 'fastify';
-import type { IPolicy } from '@polly-ts/core';
+import type { IPolicy } from 'polly-ts-core';
 
 /**
  * Creates a Fastify hook handler that applies a Polly policy.

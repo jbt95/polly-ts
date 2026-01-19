@@ -1,7 +1,7 @@
 import { Hono } from 'hono';
 import { describe, it, expect } from 'vitest';
 import { polly } from './polly-middleware';
-import { RetryPolicy, CircuitBreakerPolicy } from '@polly-ts/core';
+import { RetryPolicy, CircuitBreakerPolicy } from 'polly-ts-core';
 
 describe('polly hono middleware', () => {
   it('should allow request when policy succeeds', async () => {

@@ -1,5 +1,5 @@
 {
-  "name": "@polly-ts/express",
+  "name": "polly-ts-express",
   "version": "0.1.0",
   "description": "Express middleware for Polly-TS",
   "type": "module",
@@ -30,7 +30,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@polly-ts/core": "workspace:*"
+    "polly-ts-core": "workspace:*"
   },
   "peerDependencies": {
     "express": "^4.0.0"

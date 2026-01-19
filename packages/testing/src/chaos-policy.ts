@@ -5,8 +5,8 @@ import type {
   ExecutionContext,
   SuccessEventArgs,
   FailureEventArgs,
-} from '@polly-ts/core';
-import { PolicyEventEmitter, createExecutionContext } from '@polly-ts/core';
+} from 'polly-ts-core';
+import { PolicyEventEmitter, createExecutionContext } from 'polly-ts-core';
 
 export interface ChaosPolicyOptions extends PolicyOptions {
   /**

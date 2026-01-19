@@ -1,5 +1,5 @@
 {
-  "name": "@polly-ts/http",
+  "name": "polly-ts-http",
   "version": "0.1.0",
   "description": "HTTP fetch wrapper for Polly-TS",
   "type": "module",
@@ -30,7 +30,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@polly-ts/core": "workspace:*"
+    "polly-ts-core": "workspace:*"
   },
   "publishConfig": {
     "access": "public"

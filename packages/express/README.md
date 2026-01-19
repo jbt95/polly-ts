@@ -1,13 +1,13 @@
-# @polly-ts/express
+# polly-ts-express
 
 Express middleware for **Polly-TS**, enabling resilience policies on your API routes.
 
 ## Installation
 
 ```bash
-npm install @polly-ts/core @polly-ts/express
+npm install polly-ts-core polly-ts-express
 # or
-pnpm add @polly-ts/core @polly-ts/express
+pnpm add polly-ts-core polly-ts-express
 ```
 
 ## Usage
@@ -16,8 +16,8 @@ Wrap your route handlers with the `polly` middleware to apply policies like Circ
 
 ```typescript
 import express from 'express';
-import { polly } from '@polly-ts/express';
-import { CircuitBreakerPolicy } from '@polly-ts/core';
+import { polly } from 'polly-ts-express';
+import { CircuitBreakerPolicy } from 'polly-ts-core';
 
 const app = express();
 const breaker = new CircuitBreakerPolicy({
@@ -43,7 +43,7 @@ app.listen(3000);
 If a policy rejects the request (e.g., Circuit Open, Timeout, Bulkhead Rejected), the middleware calls `next(err)`. You should have a global error handler to format these errors appropriately.
 
 ```typescript
-import { CircuitOpenError } from '@polly-ts/core';
+import { CircuitOpenError } from 'polly-ts-core';
 
 app.use((err, req, res, next) => {
   if (err instanceof CircuitOpenError) {

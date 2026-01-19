@@ -1,5 +1,5 @@
 {
-  "name": "@polly-ts/core",
+  "name": "polly-ts-core",
   "version": "0.1.0",
   "description": "A comprehensive resilience and transient fault handling library for TypeScript",
   "type": "module",

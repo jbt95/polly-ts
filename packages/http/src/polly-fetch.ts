@@ -1,4 +1,4 @@
-import type { IPolicy } from '@polly-ts/core';
+import type { IPolicy } from 'polly-ts-core';
 
 /**
  * Options for configuring pollyFetch.

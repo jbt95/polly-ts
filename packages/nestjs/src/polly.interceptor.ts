@@ -9,7 +9,7 @@ import {
 import { type Observable, from, lastValueFrom } from 'rxjs';
 import { Reflector } from '@nestjs/core';
 import { POLLY_POLICY_KEY } from './use-policy.decorator';
-import { type IPolicy } from '@polly-ts/core';
+import { type IPolicy } from 'polly-ts-core';
 
 @Injectable()
 export class PollyInterceptor implements NestInterceptor {

@@ -1,9 +1,9 @@
-# @polly-ts/core
+# polly-ts-core
 
 A comprehensive resilience and transient fault handling library for TypeScript/Node.js, inspired by .NET Polly.
 
-[![npm version](https://img.shields.io/npm/v/@polly-ts/core.svg)](https://www.npmjs.com/package/@polly-ts/core)
-[![License](https://img.shields.io/npm/l/@polly-ts/core.svg)](https://github.com/jordi-bermejo/polly-ts/blob/main/LICENSE)
+[![npm version](https://img.shields.io/npm/v/polly-ts-core.svg)](https://www.npmjs.com/package/polly-ts-core)
+[![License](https://img.shields.io/npm/l/polly-ts-core.svg)](https://github.com/jordi-bermejo/polly-ts/blob/main/LICENSE)
 
 ## Features
 
@@ -17,9 +17,9 @@ A comprehensive resilience and transient fault handling library for TypeScript/N
 ## Installation
 
 ```bash
-pnpm add @polly-ts/core
+pnpm add polly-ts-core
 # or
-npm install @polly-ts/core
+npm install polly-ts-core
 ```
 
 ## Usage
@@ -27,7 +27,7 @@ npm install @polly-ts/core
 ### Retry Policy
 
 ```typescript
-import { RetryPolicy, ExponentialBackoff } from '@polly-ts/core';
+import { RetryPolicy, ExponentialBackoff } from 'polly-ts-core';
 
 const retry = new RetryPolicy({
   maxAttempts: 3,
@@ -43,7 +43,7 @@ const result = await retry.execute(async () => {
 ### Circuit Breaker
 
 ```typescript
-import { CircuitBreakerPolicy } from '@polly-ts/core';
+import { CircuitBreakerPolicy } from 'polly-ts-core';
 
 const breaker = new CircuitBreakerPolicy({
   failureThreshold: 5,
@@ -62,7 +62,7 @@ await breaker.execute(() => sensitiveOperation());
 Use `pipeline` to combine policies. The order matters: the first policy wraps the subsequent ones.
 
 ```typescript
-import { pipeline, RetryPolicy, CircuitBreakerPolicy, TimeoutPolicy } from '@polly-ts/core';
+import { pipeline, RetryPolicy, CircuitBreakerPolicy, TimeoutPolicy } from 'polly-ts-core';
 
 // Retry -> wraps -> CircuitBreaker -> wraps -> Timeout -> wraps -> Operation
 const resilience = pipeline(

@@ -1,5 +1,5 @@
 {
-  "name": "@polly-ts/nestjs",
+  "name": "polly-ts-nestjs",
   "version": "0.1.0",
   "description": "NestJS integration for Polly-TS",
   "type": "module",
@@ -31,7 +31,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@polly-ts/core": "workspace:*"
+    "polly-ts-core": "workspace:*"
   },
   "peerDependencies": {
     "@nestjs/common": "^8.0.0 || ^9.0.0 || ^10.0.0",

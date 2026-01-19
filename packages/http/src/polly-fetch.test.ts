@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unused-vars, @typescript-eslint/explicit-function-return-type, @typescript-eslint/require-await, no-empty */
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { pollyFetch, HttpError } from './polly-fetch';
-import { RetryPolicy } from '@polly-ts/core';
+import { RetryPolicy } from 'polly-ts-core';
 
 describe('pollyFetch', () => {
   const originalFetch = global.fetch;

@@ -1,5 +1,5 @@
 import type { MiddlewareHandler } from 'hono';
-import type { IPolicy } from '@polly-ts/core';
+import type { IPolicy } from 'polly-ts-core';
 
 /**
  * Creates a Hono middleware that applies a Polly policy.

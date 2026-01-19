@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-return, @typescript-eslint/prefer-promise-reject-errors */
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { TelemetryPolicy } from './index';
-import { PolicyEventEmitter } from '@polly-ts/core';
-import type { IPolicy } from '@polly-ts/core';
+import { PolicyEventEmitter } from 'polly-ts-core';
+import type { IPolicy } from 'polly-ts-core';
 
 // Mock OpenTelemetry
 const mockSpan = {

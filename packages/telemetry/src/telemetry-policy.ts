@@ -14,8 +14,8 @@ import type {
   SuccessEventArgs,
   FailureEventArgs,
   PolicyEvent,
-} from '@polly-ts/core';
-// We need to import PolicyEventEmitter but it's not exported from @polly-ts/core top level?
+} from 'polly-ts-core';
+// We need to import PolicyEventEmitter but it's not exported from polly-ts-core top level?
 // I exported events types but not class PolicyEventEmitter?
 // Let me check core exports.
 // If not exported, I implement TelemetryPolicy simply wrapping execute.

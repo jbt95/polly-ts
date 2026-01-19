@@ -1,5 +1,5 @@
 {
-  "name": "@polly-ts/fastify",
+  "name": "polly-ts-fastify",
   "version": "0.1.0",
   "description": "Fastify integration for Polly-TS",
   "type": "module",
@@ -30,7 +30,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@polly-ts/core": "workspace:*"
+    "polly-ts-core": "workspace:*"
   },
   "peerDependencies": {
     "fastify": "^4.0.0 || ^5.0.0"

@@ -1,13 +1,13 @@
-# @polly-ts/fastify
+# polly-ts-fastify
 
 Fastify plugin/hooks for **Polly-TS**, enabling resilience policies on your routes.
 
 ## Installation
 
 ```bash
-npm install @polly-ts/core @polly-ts/fastify
+npm install polly-ts-core polly-ts-fastify
 # or
-pnpm add @polly-ts/core @polly-ts/fastify
+pnpm add polly-ts-core polly-ts-fastify
 ```
 
 ## Usage
@@ -16,8 +16,8 @@ Use the `polly` hook wrapper to apply policies to Fastify routes.
 
 ```typescript
 import Fastify from 'fastify';
-import { polly } from '@polly-ts/fastify';
-import { BulkheadPolicy } from '@polly-ts/core';
+import { polly } from 'polly-ts-fastify';
+import { BulkheadPolicy } from 'polly-ts-core';
 
 const fastify = Fastify();
 
@@ -42,7 +42,7 @@ fastify.listen({ port: 3000 });
 Polly-TS errors (like `BulkheadRejectedError` or `CircuitOpenError`) will be thrown by the hook. Fastify's default error handler will return 500. You can customize this:
 
 ```typescript
-import { BulkheadRejectedError } from '@polly-ts/core';
+import { BulkheadRejectedError } from 'polly-ts-core';
 
 fastify.setErrorHandler((error, request, reply) => {
   if (error instanceof BulkheadRejectedError) {

@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import Fastify from 'fastify';
 import { polly } from './polly-plugin';
-import { CircuitBreakerPolicy } from '@polly-ts/core';
+import { CircuitBreakerPolicy } from 'polly-ts-core';
 
 describe('polly fastify hook', () => {
   it('should allow request when policy succeeds', async () => {

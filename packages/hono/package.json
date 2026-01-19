@@ -1,5 +1,5 @@
 {
-  "name": "@polly-ts/hono",
+  "name": "polly-ts-hono",
   "version": "0.1.0",
   "description": "Hono middleware for Polly-TS",
   "type": "module",
@@ -30,7 +30,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@polly-ts/core": "workspace:*"
+    "polly-ts-core": "workspace:*"
   },
   "peerDependencies": {
     "hono": "^3.0.0 || ^4.0.0"

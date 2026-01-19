@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/unbound-method */
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { polly } from './polly-middleware';
-import { CircuitBreakerPolicy, CircuitOpenError } from '@polly-ts/core';
+import { CircuitBreakerPolicy, CircuitOpenError } from 'polly-ts-core';
 import { EventEmitter } from 'events';
 import type { Request, Response, NextFunction } from 'express';
 

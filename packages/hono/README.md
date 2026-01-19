@@ -1,21 +1,21 @@
-# @polly-ts/hono
+# polly-ts-hono
 
 Hono middleware for **Polly-TS**.
 
 ## Installation
 
 ```bash
-npm install @polly-ts/core @polly-ts/hono
+npm install polly-ts-core polly-ts-hono
 # or
-pnpm add @polly-ts/core @polly-ts/hono
+pnpm add polly-ts-core polly-ts-hono
 ```
 
 ## Usage
 
 ```typescript
 import { Hono } from 'hono';
-import { polly } from '@polly-ts/hono';
-import { TimeoutPolicy } from '@polly-ts/core';
+import { polly } from 'polly-ts-hono';
+import { TimeoutPolicy } from 'polly-ts-core';
 
 const app = new Hono();
 const timeout = new TimeoutPolicy({ timeoutMs: 2000 });

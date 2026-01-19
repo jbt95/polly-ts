@@ -1,5 +1,5 @@
 {
-  "name": "@polly-ts/telemetry",
+  "name": "polly-ts-telemetry",
   "version": "0.1.0",
   "description": "Telemetry integration for Polly-TS",
   "type": "module",
@@ -31,7 +31,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@polly-ts/core": "workspace:*"
+    "polly-ts-core": "workspace:*"
   },
   "devDependencies": {
     "@opentelemetry/api": "^1.9.0"

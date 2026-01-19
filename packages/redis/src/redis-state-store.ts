@@ -1,5 +1,5 @@
 import type { Redis } from 'ioredis';
-import type { CircuitBreakerStateStore, CircuitState } from '@polly-ts/core';
+import type { CircuitBreakerStateStore, CircuitState } from 'polly-ts-core';
 
 export interface RedisStateStoreOptions {
   client: Redis;

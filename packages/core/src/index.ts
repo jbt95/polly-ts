@@ -1,4 +1,4 @@
-// @polly-ts/core
+// polly-ts-core
 // A comprehensive resilience and transient fault handling library for TypeScript
 
 // Types

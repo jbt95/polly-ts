@@ -1,4 +1,4 @@
-# @polly-ts/telemetry
+# polly-ts-telemetry
 
 Telemetry integration for **Polly-TS**, allowing you to emit metrics and traces for resilience events (retries, timeouts, circuit breaks).
 
@@ -7,9 +7,9 @@ Telemetry integration for **Polly-TS**, allowing you to emit metrics and traces 
 ## Installation
 
 ```bash
-npm install @polly-ts/core @polly-ts/telemetry
+npm install polly-ts-core polly-ts-telemetry
 # or
-pnpm add @polly-ts/core @polly-ts/telemetry
+pnpm add polly-ts-core polly-ts-telemetry
 ```
 
 ## Usage
@@ -17,8 +17,8 @@ pnpm add @polly-ts/core @polly-ts/telemetry
 Wrap your existing policies with `TelemetryPolicy` to observe their execution.
 
 ```typescript
-import { TelemetryPolicy } from '@polly-ts/telemetry';
-import { RetryPolicy } from '@polly-ts/core';
+import { TelemetryPolicy } from 'polly-ts-telemetry';
+import { RetryPolicy } from 'polly-ts-core';
 
 const retry = new RetryPolicy();
 

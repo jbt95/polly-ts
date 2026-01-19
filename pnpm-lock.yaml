@@ -40,7 +40,7 @@ importers:
 
   packages/express:
     dependencies:
-      '@polly-ts/core':
+      polly-ts-core:
         specifier: workspace:*
         version: link:../core
     devDependencies:
@@ -53,7 +53,7 @@ importers:
 
   packages/fastify:
     dependencies:
-      '@polly-ts/core':
+      polly-ts-core:
         specifier: workspace:*
         version: link:../core
     devDependencies:
@@ -66,7 +66,7 @@ importers:
 
   packages/hono:
     dependencies:
-      '@polly-ts/core':
+      polly-ts-core:
         specifier: workspace:*
         version: link:../core
     devDependencies:
@@ -76,13 +76,13 @@ importers:
 
   packages/http:
     dependencies:
-      '@polly-ts/core':
+      polly-ts-core:
         specifier: workspace:*
         version: link:../core
 
   packages/nestjs:
     dependencies:
-      '@polly-ts/core':
+      polly-ts-core:
         specifier: workspace:*
         version: link:../core
     devDependencies:
@@ -113,12 +113,12 @@ importers:
 
   packages/redis:
     dependencies:
-      '@polly-ts/core':
-        specifier: workspace:*
-        version: link:../core
       ioredis:
         specifier: ^5.0.0
         version: 5.9.2
+      polly-ts-core:
+        specifier: workspace:*
+        version: link:../core
     devDependencies:
       '@types/ioredis-mock':
         specifier: ^8.2.6
@@ -129,7 +129,7 @@ importers:
 
   packages/telemetry:
     dependencies:
-      '@polly-ts/core':
+      polly-ts-core:
         specifier: workspace:*
         version: link:../core
     devDependencies:
@@ -139,7 +139,7 @@ importers:
 
   packages/testing:
     dependencies:
-      '@polly-ts/core':
+      polly-ts-core:
         specifier: workspace:*
         version: link:../core
     devDependencies:

@@ -29,32 +29,32 @@ Modern distributed systems are inherently unreliable. Networks fail, services go
 
 ## Packages
 
-| Package | Description | Version |
-|---------|-------------|---------|
-| [`@polly-ts/core`](./packages/core) | Core policies and execution engine | ![npm](https://img.shields.io/npm/v/@polly-ts/core) |
-| [`@polly-ts/http`](./packages/http) | Wrappers for standard `fetch` API | ![npm](https://img.shields.io/npm/v/@polly-ts/http) |
-| [`@polly-ts/express`](./packages/express) | Resilience middleware for Express | ![npm](https://img.shields.io/npm/v/@polly-ts/express) |
-| [`@polly-ts/fastify`](./packages/fastify) | Plugins and hooks for Fastify | ![npm](https://img.shields.io/npm/v/@polly-ts/fastify) |
-| [`@polly-ts/nestjs`](./packages/nestjs) | Modules, decorators, and interceptors for NestJS | ![npm](https://img.shields.io/npm/v/@polly-ts/nestjs) |
-| [`@polly-ts/hono`](./packages/hono) | Middleware for Hono | ![npm](https://img.shields.io/npm/v/@polly-ts/hono) |
-| [`@polly-ts/redis`](./packages/redis) | Distributed circuit breaker state using Redis | ![npm](https://img.shields.io/npm/v/@polly-ts/redis) |
-| [`@polly-ts/telemetry`](./packages/telemetry) | OpenTelemetry integration | ![npm](https://img.shields.io/npm/v/@polly-ts/telemetry) |
-| [`@polly-ts/testing`](./packages/testing) | Testing utilities and chaos injection | ![npm](https://img.shields.io/npm/v/@polly-ts/testing) |
+| Package                                      | Description                                      | Version                                                 |
+| -------------------------------------------- | ------------------------------------------------ | ------------------------------------------------------- |
+| [`polly-ts-core`](./packages/core)           | Core policies and execution engine               | ![npm](https://img.shields.io/npm/v/polly-ts-core)      |
+| [`polly-ts-http`](./packages/http)           | Wrappers for standard `fetch` API                | ![npm](https://img.shields.io/npm/v/polly-ts-http)      |
+| [`polly-ts-express`](./packages/express)     | Resilience middleware for Express                | ![npm](https://img.shields.io/npm/v/polly-ts-express)   |
+| [`polly-ts-fastify`](./packages/fastify)     | Plugins and hooks for Fastify                    | ![npm](https://img.shields.io/npm/v/polly-ts-fastify)   |
+| [`polly-ts-nestjs`](./packages/nestjs)       | Modules, decorators, and interceptors for NestJS | ![npm](https://img.shields.io/npm/v/polly-ts-nestjs)    |
+| [`polly-ts-hono`](./packages/hono)           | Middleware for Hono                              | ![npm](https://img.shields.io/npm/v/polly-ts-hono)      |
+| [`polly-ts-redis`](./packages/redis)         | Distributed circuit breaker state using Redis    | ![npm](https://img.shields.io/npm/v/polly-ts-redis)     |
+| [`polly-ts-telemetry`](./packages/telemetry) | OpenTelemetry integration                        | ![npm](https://img.shields.io/npm/v/polly-ts-telemetry) |
+| [`polly-ts-testing`](./packages/testing)     | Testing utilities and chaos injection            | ![npm](https://img.shields.io/npm/v/polly-ts-testing)   |
 
 ## Quick Start
 
 ### Installation
 
 ```bash
-pnpm add @polly-ts/core
+pnpm add polly-ts-core
 # or
-npm install @polly-ts/core
+npm install polly-ts-core
 ```
 
 ### Basic Usage
 
 ```typescript
-import { RetryPolicy, CircuitBreakerPolicy, pipeline } from '@polly-ts/core';
+import { RetryPolicy, CircuitBreakerPolicy, pipeline } from 'polly-ts-core';
 
 // Define a Retry Policy with exponential backoff
 const retry = new RetryPolicy({
@@ -85,7 +85,7 @@ const result = await strategy.execute(async () => {
 #### Retry with Backoff
 
 ```typescript
-import { RetryPolicy, ExponentialBackoff } from '@polly-ts/core';
+import { RetryPolicy, ExponentialBackoff } from 'polly-ts-core';
 
 const retry = new RetryPolicy({
   maxAttempts: 5,
@@ -104,12 +104,12 @@ retry.onRetry((event) => {
 #### Circuit Breaker
 
 ```typescript
-import { CircuitBreakerPolicy } from '@polly-ts/core';
+import { CircuitBreakerPolicy } from 'polly-ts-core';
 
 const breaker = new CircuitBreakerPolicy({
-  failureThreshold: 3,      // Open after 3 failures
-  breakDuration: 30000,     // Stay open for 30 seconds
-  successThreshold: 2,      // Close after 2 successes in half-open state
+  failureThreshold: 3, // Open after 3 failures
+  breakDuration: 30000, // Stay open for 30 seconds
+  successThreshold: 2, // Close after 2 successes in half-open state
 });
 
 breaker.onStateChange((event) => {
@@ -120,7 +120,7 @@ breaker.onStateChange((event) => {
 #### Timeout
 
 ```typescript
-import { TimeoutPolicy } from '@polly-ts/core';
+import { TimeoutPolicy } from 'polly-ts-core';
 
 const timeout = new TimeoutPolicy({
   timeoutMs: 5000,
@@ -131,18 +131,18 @@ const timeout = new TimeoutPolicy({
 #### Bulkhead
 
 ```typescript
-import { BulkheadPolicy } from '@polly-ts/core';
+import { BulkheadPolicy } from 'polly-ts-core';
 
 const bulkhead = new BulkheadPolicy({
-  maxConcurrent: 10,  // Max 10 concurrent executions
-  maxQueue: 100,      // Queue up to 100 waiting requests
+  maxConcurrent: 10, // Max 10 concurrent executions
+  maxQueue: 100, // Queue up to 100 waiting requests
 });
 ```
 
 #### Fallback
 
 ```typescript
-import { FallbackPolicy } from '@polly-ts/core';
+import { FallbackPolicy } from 'polly-ts-core';
 
 const fallback = new FallbackPolicy({
   fallback: (error, context) => ({ data: 'default', fromCache: true }),
@@ -158,8 +158,8 @@ Polly-TS provides dedicated packages for popular Node.js frameworks.
 
 ```typescript
 import express from 'express';
-import { polly } from '@polly-ts/express';
-import { CircuitBreakerPolicy } from '@polly-ts/core';
+import { polly } from 'polly-ts-express';
+import { CircuitBreakerPolicy } from 'polly-ts-core';
 
 const app = express();
 const breaker = new CircuitBreakerPolicy({ failureThreshold: 5 });
@@ -176,8 +176,8 @@ app.get('/api/data', polly(breaker), async (req, res) => {
 
 ```typescript
 import Fastify from 'fastify';
-import { polly } from '@polly-ts/fastify';
-import { BulkheadPolicy } from '@polly-ts/core';
+import { polly } from 'polly-ts-fastify';
+import { BulkheadPolicy } from 'polly-ts-core';
 
 const fastify = Fastify();
 const bulkhead = new BulkheadPolicy({ maxConcurrent: 10 });
@@ -195,7 +195,7 @@ fastify.get('/api/data', async () => {
 
 ```typescript
 import { Controller, Get } from '@nestjs/common';
-import { UsePolicy } from '@polly-ts/nestjs';
+import { UsePolicy } from 'polly-ts-nestjs';
 
 @Controller('data')
 export class DataController {
@@ -213,8 +213,8 @@ export class DataController {
 
 ```typescript
 import { Hono } from 'hono';
-import { polly } from '@polly-ts/hono';
-import { TimeoutPolicy } from '@polly-ts/core';
+import { polly } from 'polly-ts-hono';
+import { TimeoutPolicy } from 'polly-ts-core';
 
 const app = new Hono();
 const timeout = new TimeoutPolicy({ timeoutMs: 5000 });
@@ -234,8 +234,8 @@ app.get('/api/data', async (c) => {
 Wrap the global `fetch` with resilience policies:
 
 ```typescript
-import { pollyFetch } from '@polly-ts/http';
-import { RetryPolicy } from '@polly-ts/core';
+import { pollyFetch } from 'polly-ts-http';
+import { RetryPolicy } from 'polly-ts-core';
 
 const retry = new RetryPolicy({ maxAttempts: 3 });
 const resilientFetch = pollyFetch(retry);
@@ -248,8 +248,8 @@ const response = await resilientFetch('https://api.example.com/data');
 Share circuit breaker state across multiple service instances using Redis:
 
 ```typescript
-import { CircuitBreakerPolicy } from '@polly-ts/core';
-import { RedisStateStore } from '@polly-ts/redis';
+import { CircuitBreakerPolicy } from 'polly-ts-core';
+import { RedisStateStore } from 'polly-ts-redis';
 import Redis from 'ioredis';
 
 const redis = new Redis();
@@ -272,7 +272,7 @@ const breaker = new CircuitBreakerPolicy({
 Monitor your resilience policies with OpenTelemetry:
 
 ```typescript
-import { TelemetryPolicy } from '@polly-ts/telemetry';
+import { TelemetryPolicy } from 'polly-ts-telemetry';
 import { trace, metrics } from '@opentelemetry/api';
 
 const telemetry = new TelemetryPolicy(innerPolicy, {

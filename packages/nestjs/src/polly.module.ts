@@ -1,6 +1,6 @@
 import { Module, type DynamicModule, type Provider, Global } from '@nestjs/common';
 import { APP_INTERCEPTOR } from '@nestjs/core';
-import { type IPolicy } from '@polly-ts/core';
+import { type IPolicy } from 'polly-ts-core';
 import { PollyInterceptor } from './polly.interceptor';
 
 export interface PollyModuleOptions {

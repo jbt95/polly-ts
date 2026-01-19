@@ -3,7 +3,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { Controller, Get, Injectable, Inject } from '@nestjs/common';
 import { PollyModule } from './polly.module';
 import { UsePolicy } from './use-policy.decorator';
-import { RetryPolicy, CircuitBreakerPolicy } from '@polly-ts/core';
+import { RetryPolicy, CircuitBreakerPolicy } from 'polly-ts-core';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import request from 'supertest';
 

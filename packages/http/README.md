@@ -1,13 +1,13 @@
-# @polly-ts/http
+# polly-ts-http
 
 Resilience wrappers for the standard Fetch API, part of the **Polly-TS** library.
 
 ## Installation
 
 ```bash
-npm install @polly-ts/core @polly-ts/http
+npm install polly-ts-core polly-ts-http
 # or
-pnpm add @polly-ts/core @polly-ts/http
+pnpm add polly-ts-core polly-ts-http
 ```
 
 ## Usage
@@ -15,8 +15,8 @@ pnpm add @polly-ts/core @polly-ts/http
 Use `pollyFetch` to wrap your HTTP requests with resilience policies (Retry, Circuit Breaker, etc.).
 
 ```typescript
-import { pollyFetch, HttpError } from '@polly-ts/http';
-import { RetryPolicy, CircuitBreakerPolicy } from '@polly-ts/core';
+import { pollyFetch, HttpError } from 'polly-ts-http';
+import { RetryPolicy, CircuitBreakerPolicy } from 'polly-ts-core';
 
 const retry = new RetryPolicy({ maxAttempts: 3 });
 const breaker = new CircuitBreakerPolicy({ failureThreshold: 5, breakDuration: 10000 });
@@ -43,7 +43,7 @@ async function getData() {
 `pollyFetch` automatically handles `AbortSignal` propagation. If the policy times out or is cancelled, the underlying fetch request will be aborted.
 
 ```typescript
-import { TimeoutPolicy } from '@polly-ts/core';
+import { TimeoutPolicy } from 'polly-ts-core';
 
 const timeout = new TimeoutPolicy({ timeoutMs: 1000 });
 const fetchWithTimeout = pollyFetch(timeout);

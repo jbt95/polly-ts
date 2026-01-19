@@ -5,5 +5,5 @@ export default defineConfig({
   format: ['esm', 'cjs'],
   dts: true,
   clean: true,
-  external: ['@polly-ts/core'],
+  external: ['polly-ts-core'],
 });

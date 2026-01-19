@@ -1,5 +1,5 @@
 {
-  "name": "@polly-ts/redis",
+  "name": "polly-ts-redis",
   "version": "0.1.0",
   "description": "Redis integration for Polly-TS",
   "type": "module",
@@ -31,7 +31,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@polly-ts/core": "workspace:*",
+    "polly-ts-core": "workspace:*",
     "ioredis": "^5.0.0"
   },
   "devDependencies": {

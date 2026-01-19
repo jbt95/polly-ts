@@ -101,13 +101,13 @@ get_local_version() {
 
 # Function to get published version from npm
 get_npm_version() {
-  local pkg_name="@polly-ts/$1"
+  local pkg_name="polly-ts-$1"
   npm view "$pkg_name" version 2>/dev/null || echo ""
 }
 
 # Function to check if version exists on npm
 version_exists_on_npm() {
-  local pkg_name="@polly-ts/$1"
+  local pkg_name="polly-ts-$1"
   local version="$2"
   npm view "$pkg_name@$version" version &>/dev/null
 }
@@ -160,7 +160,7 @@ for pkg in "${PACKAGES[@]}"; do
   fi
 
   npm_version=$(get_npm_version "$pkg")
-  pkg_name="@polly-ts/$pkg"
+  pkg_name="polly-ts-$pkg"
 
   if [ -z "$npm_version" ]; then
     echo -e "${GREEN}  [$pkg] $local_version - NEW PACKAGE (not on npm)${NC}"
@@ -200,7 +200,7 @@ PUBLISHED=0
 FAILED=0
 
 for pkg in "${PACKAGES_TO_PUBLISH[@]}"; do
-  pkg_name="@polly-ts/$pkg"
+  pkg_name="polly-ts-$pkg"
   pkg_dir="packages/$pkg"
   local_version=$(get_local_version "$pkg")
 

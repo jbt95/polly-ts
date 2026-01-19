@@ -1,13 +1,13 @@
-# @polly-ts/nestjs
+# polly-ts-nestjs
 
 NestJS module and decorators for **Polly-TS**, integrating resilience policies into your application architecture.
 
 ## Installation
 
 ```bash
-npm install @polly-ts/core @polly-ts/nestjs
+npm install polly-ts-core polly-ts-nestjs
 # or
-pnpm add @polly-ts/core @polly-ts/nestjs
+pnpm add polly-ts-core polly-ts-nestjs
 ```
 
 ## Setup
@@ -17,8 +17,8 @@ register the global `PollyModule` with your policies.
 ```typescript
 // app.module.ts
 import { Module } from '@nestjs/common';
-import { PollyModule } from '@polly-ts/nestjs';
-import { RetryPolicy } from '@polly-ts/core';
+import { PollyModule } from 'polly-ts-nestjs';
+import { RetryPolicy } from 'polly-ts-core';
 
 @Module({
   imports: [
@@ -41,7 +41,7 @@ Use the `@UsePolicy` decorator to protect your Controller methods or Services (i
 
 ```typescript
 import { Controller, Get } from '@nestjs/common';
-import { UsePolicy } from '@polly-ts/nestjs';
+import { UsePolicy } from 'polly-ts-nestjs';
 
 @Controller('users')
 export class UserController {
