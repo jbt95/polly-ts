@@ -174,7 +174,9 @@ export class HedgingPolicy implements IPolicy {
 
     if (signal) {
       if (signal.aborted) throw signal.reason;
-      signal.addEventListener('abort', () => { abortController.abort(signal.reason); });
+      signal.addEventListener('abort', () => {
+        abortController.abort(signal.reason);
+      });
     }
 
     const attempts: Promise<T>[] = [];

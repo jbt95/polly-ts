@@ -7,10 +7,10 @@ export type PolicyEventListener<T> = (args: T) => void;
  * Event interface for subscribing to policy events.
  */
 /**
-   * Subscribe to this event.
-   * @param listener - The callback to invoke when the event fires
-   * @returns A function to unsubscribe
-   */
+ * Subscribe to this event.
+ * @param listener - The callback to invoke when the event fires
+ * @returns A function to unsubscribe
+ */
 export type PolicyEvent<T> = (listener: PolicyEventListener<T>) => () => void;
 
 /**

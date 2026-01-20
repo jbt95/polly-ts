@@ -126,9 +126,7 @@ export class MemoryCacheProvider implements ICacheProvider {
    *                the value is cached indefinitely.
    */
   set(key: string, value: unknown, ttlMs?: number): void {
-    const expiresAt = ttlMs && ttlMs > 0
-      ? Date.now() + ttlMs
-      : Number.MAX_SAFE_INTEGER;
+    const expiresAt = ttlMs && ttlMs > 0 ? Date.now() + ttlMs : Number.MAX_SAFE_INTEGER;
     this.store.set(key, { value, expiresAt });
   }
 

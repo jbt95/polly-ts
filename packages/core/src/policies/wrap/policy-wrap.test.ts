@@ -12,7 +12,9 @@ describe('PolicyWrap', () => {
 
     const outer: IPolicy<string> = {
       name: 'Outer',
-      execute: async <T extends string>(fn: (ctx: ExecutionContext) => Promise<T> | T): Promise<T> => {
+      execute: async <T extends string>(
+        fn: (ctx: ExecutionContext) => Promise<T> | T,
+      ): Promise<T> => {
         events.push('outer-start');
         const result = await fn({ signal: new AbortController().signal } as ExecutionContext);
         events.push('outer-end');
@@ -24,7 +26,9 @@ describe('PolicyWrap', () => {
 
     const inner: IPolicy<string> = {
       name: 'Inner',
-      execute: async <T extends string>(fn: (ctx: ExecutionContext) => Promise<T> | T): Promise<T> => {
+      execute: async <T extends string>(
+        fn: (ctx: ExecutionContext) => Promise<T> | T,
+      ): Promise<T> => {
         events.push('inner-start');
         const result = await fn({ signal: new AbortController().signal } as ExecutionContext);
         events.push('inner-end');
@@ -47,7 +51,10 @@ describe('PolicyWrap', () => {
     // Retry(Timeout(Operation))
     // If operation times out, Retry should catch it and retry.
     it('should retry on timeout', async () => {
-      const retry = new RetryPolicy({ maxAttempts: 2, delayFn: (): Promise<void> => Promise.resolve() });
+      const retry = new RetryPolicy({
+        maxAttempts: 2,
+        delayFn: (): Promise<void> => Promise.resolve(),
+      });
       const timeout = new TimeoutPolicy({ timeoutMs: 50, strategy: 'pessimistic' });
 
       const wrap = new PolicyWrap(retry, timeout);
@@ -74,7 +81,10 @@ describe('PolicyWrap', () => {
     // If CircuitBreaker opens, subsequent calls fail fast.
     it('should open circuit after retries exhausted', async () => {
       const circuitBreaker = new CircuitBreakerPolicy({ failureThreshold: 1 });
-      const retry = new RetryPolicy({ maxAttempts: 1, delayFn: (): Promise<void> => Promise.resolve() });
+      const retry = new RetryPolicy({
+        maxAttempts: 1,
+        delayFn: (): Promise<void> => Promise.resolve(),
+      });
 
       const wrap = new PolicyWrap(circuitBreaker, retry);
 
@@ -96,7 +106,9 @@ describe('PolicyWrap', () => {
 
       const p1: IPolicy<string> = {
         name: 'P1',
-        execute: async <T extends string>(fn: (ctx: ExecutionContext) => Promise<T> | T): Promise<T> => {
+        execute: async <T extends string>(
+          fn: (ctx: ExecutionContext) => Promise<T> | T,
+        ): Promise<T> => {
           events.push('p1-start');
           const res = await fn({ signal: new AbortController().signal } as ExecutionContext);
           events.push('p1-end');
@@ -108,7 +120,9 @@ describe('PolicyWrap', () => {
 
       const p2: IPolicy<string> = {
         name: 'P2',
-        execute: async <T extends string>(fn: (ctx: ExecutionContext) => Promise<T> | T): Promise<T> => {
+        execute: async <T extends string>(
+          fn: (ctx: ExecutionContext) => Promise<T> | T,
+        ): Promise<T> => {
           events.push('p2-start');
           const res = await fn({ signal: new AbortController().signal } as ExecutionContext);
           events.push('p2-end');
@@ -120,7 +134,9 @@ describe('PolicyWrap', () => {
 
       const p3: IPolicy<string> = {
         name: 'P3',
-        execute: async <T extends string>(fn: (ctx: ExecutionContext) => Promise<T> | T): Promise<T> => {
+        execute: async <T extends string>(
+          fn: (ctx: ExecutionContext) => Promise<T> | T,
+        ): Promise<T> => {
           events.push('p3-start');
           const res = await fn({ signal: new AbortController().signal } as ExecutionContext);
           events.push('p3-end');

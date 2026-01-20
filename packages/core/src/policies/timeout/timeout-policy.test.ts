@@ -16,7 +16,11 @@ describe('TimeoutPolicy', () => {
       const policy = new TimeoutPolicy({ timeoutMs: 50, strategy: 'pessimistic' });
 
       const slowOperation = (): Promise<string> =>
-        new Promise((resolve) => setTimeout(() => { resolve('too late'); }, 200));
+        new Promise((resolve) =>
+          setTimeout(() => {
+            resolve('too late');
+          }, 200),
+        );
 
       await expect(policy.execute(slowOperation)).rejects.toThrow(TimeoutError);
     });
@@ -27,7 +31,11 @@ describe('TimeoutPolicy', () => {
       policy.onTimeout(timeoutHandler);
 
       const slowOperation = (): Promise<string> =>
-        new Promise((resolve) => setTimeout(() => { resolve('too late'); }, 200));
+        new Promise((resolve) =>
+          setTimeout(() => {
+            resolve('too late');
+          }, 200),
+        );
 
       await expect(policy.execute(slowOperation)).rejects.toThrow();
 
@@ -66,7 +74,9 @@ describe('TimeoutPolicy', () => {
 
       const cooperativeOperation = (ctx: { signal: AbortSignal }): Promise<string> =>
         new Promise((resolve, reject) => {
-          const timeout = setTimeout(() => { resolve('completed'); }, 200);
+          const timeout = setTimeout(() => {
+            resolve('completed');
+          }, 200);
 
           ctx.signal.addEventListener('abort', () => {
             clearTimeout(timeout);
@@ -86,7 +96,9 @@ describe('TimeoutPolicy', () => {
 
       const cooperativeOperation = (ctx: { signal: AbortSignal }): Promise<string> =>
         new Promise((resolve, reject) => {
-          const timeout = setTimeout(() => { resolve('completed'); }, 200);
+          const timeout = setTimeout(() => {
+            resolve('completed');
+          }, 200);
           ctx.signal.addEventListener('abort', () => {
             clearTimeout(timeout);
             reject(ctx.signal.reason as Error);
@@ -110,7 +122,9 @@ describe('TimeoutPolicy', () => {
 
       const cooperativeOperation = (ctx: { signal: AbortSignal }): Promise<string> =>
         new Promise((resolve, reject) => {
-          const timeout = setTimeout(() => { resolve('done'); }, 500);
+          const timeout = setTimeout(() => {
+            resolve('done');
+          }, 500);
           ctx.signal.addEventListener('abort', () => {
             clearTimeout(timeout);
             reject(ctx.signal.reason as Error);
@@ -118,7 +132,9 @@ describe('TimeoutPolicy', () => {
         });
 
       // Abort after 50ms
-      setTimeout(() => { externalController.abort(new Error('User cancelled')); }, 50);
+      setTimeout(() => {
+        externalController.abort(new Error('User cancelled'));
+      }, 50);
 
       await expect(policy.execute(cooperativeOperation, externalController.signal)).rejects.toThrow(
         'User cancelled',

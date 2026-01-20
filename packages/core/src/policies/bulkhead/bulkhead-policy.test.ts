@@ -17,7 +17,12 @@ describe('BulkheadPolicy', () => {
 
       // Start a slow operation
       const slowOp = policy.execute(
-        () => new Promise((resolve) => setTimeout(() => { resolve('slow'); }, 100)),
+        () =>
+          new Promise((resolve) =>
+            setTimeout(() => {
+              resolve('slow');
+            }, 100),
+          ),
       );
 
       // Second should be rejected immediately
@@ -58,7 +63,16 @@ describe('BulkheadPolicy', () => {
 
       const pendingOps: Promise<string>[] = [];
       for (let i = 0; i < 2; i++) {
-        pendingOps.push(policy.execute(() => new Promise((r) => setTimeout(() => { r('done'); }, 50))));
+        pendingOps.push(
+          policy.execute(
+            () =>
+              new Promise((r) =>
+                setTimeout(() => {
+                  r('done');
+                }, 50),
+              ),
+          ),
+        );
       }
 
       // Allow operations to start
@@ -78,7 +92,12 @@ describe('BulkheadPolicy', () => {
 
       // Start first operation
       const op1 = policy.execute(
-        () => new Promise((resolve) => setTimeout(() => { resolve('first'); }, 100)),
+        () =>
+          new Promise((resolve) =>
+            setTimeout(() => {
+              resolve('first');
+            }, 100),
+          ),
       );
 
       // Try second - should be rejected

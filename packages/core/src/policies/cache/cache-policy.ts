@@ -208,7 +208,9 @@ export class CachePolicy implements IPolicy {
 
     const abortController = new AbortController();
     if (signal) {
-      signal.addEventListener('abort', () => { abortController.abort(signal.reason); });
+      signal.addEventListener('abort', () => {
+        abortController.abort(signal.reason);
+      });
     }
 
     const context = createExecutionContext({
