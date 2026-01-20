@@ -76,7 +76,7 @@ PACKAGES=(
   "nestjs"
   "redis"
   "telemetry"
-  "testing",
+  "testing"
   "polly-ts"
 )
 
@@ -102,15 +102,25 @@ get_local_version() {
 
 # Function to get published version from npm
 get_npm_version() {
-  local pkg_name="polly-ts-$1"
+  local pkg_name
+  pkg_name=$(get_pkg_name "$1")
   npm view "$pkg_name" version 2>/dev/null || echo ""
 }
 
 # Function to check if version exists on npm
 version_exists_on_npm() {
-  local pkg_name="polly-ts-$1"
+  local pkg_name
+  pkg_name=$(get_pkg_name "$1")
   local version="$2"
   npm view "$pkg_name@$version" version &>/dev/null
+}
+
+get_pkg_name() {
+  if [ "$1" = "polly-ts" ]; then
+    echo "polly-ts"
+  else
+    echo "polly-ts-$1"
+  fi
 }
 
 # Step 1: Run tests (unless skipped)
@@ -161,7 +171,7 @@ for pkg in "${PACKAGES[@]}"; do
   fi
 
   npm_version=$(get_npm_version "$pkg")
-  pkg_name="polly-ts-$pkg"
+  pkg_name=$(get_pkg_name "$pkg")
 
   if [ -z "$npm_version" ]; then
     echo -e "${GREEN}  [$pkg] $local_version - NEW PACKAGE (not on npm)${NC}"
@@ -201,7 +211,7 @@ PUBLISHED=0
 FAILED=0
 
 for pkg in "${PACKAGES_TO_PUBLISH[@]}"; do
-  pkg_name="polly-ts-$pkg"
+  pkg_name=$(get_pkg_name "$pkg")
   pkg_dir="packages/$pkg"
   local_version=$(get_local_version "$pkg")
 

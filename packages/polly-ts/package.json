@@ -33,7 +33,7 @@
     "bulkhead",
     "typescript"
   ],
-  "author": "",
+  "author": "Jordi Bermejo <jordi.dev95@gmail.com>",
   "license": "MIT",
   "dependencies": {
     "polly-ts-core": "workspace:*",
