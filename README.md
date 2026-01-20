@@ -31,6 +31,7 @@ Modern distributed systems are inherently unreliable. Networks fail, services go
 
 | Package                                      | Description                                      | Version                                                 |
 | -------------------------------------------- | ------------------------------------------------ | ------------------------------------------------------- |
+| [`polly-ts`](./packages/polly-ts)            | All-in-one bundle with core policies and add-ons | ![npm](https://img.shields.io/npm/v/polly-ts)           |
 | [`polly-ts-core`](./packages/core)           | Core policies and execution engine               | ![npm](https://img.shields.io/npm/v/polly-ts-core)      |
 | [`polly-ts-http`](./packages/http)           | Wrappers for standard `fetch` API                | ![npm](https://img.shields.io/npm/v/polly-ts-http)      |
 | [`polly-ts-express`](./packages/express)     | Resilience middleware for Express                | ![npm](https://img.shields.io/npm/v/polly-ts-express)   |
@@ -49,6 +50,14 @@ Modern distributed systems are inherently unreliable. Networks fail, services go
 pnpm add polly-ts-core
 # or
 npm install polly-ts-core
+```
+
+Prefer the all-in-one bundle?
+
+```bash
+pnpm add polly-ts
+# or
+npm install polly-ts
 ```
 
 ### Basic Usage
@@ -78,6 +87,16 @@ const result = await strategy.execute(async () => {
   if (!res.ok) throw new Error('Network Error');
   return res.json();
 });
+```
+
+With the all-in-one bundle:
+
+```typescript
+import { RetryPolicy, CircuitBreakerPolicy, pipeline } from 'polly-ts';
+
+const retry = new RetryPolicy({ maxAttempts: 3 });
+const breaker = new CircuitBreakerPolicy({ failureThreshold: 5 });
+const strategy = pipeline(breaker, retry);
 ```
 
 ### Individual Policies

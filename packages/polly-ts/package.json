@@ -1,0 +1,52 @@
+{
+  "name": "polly-ts",
+  "version": "0.1.0",
+  "description": "All-in-one Polly-TS bundle with core policies and integrations",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest",
+    "lint": "eslint src/ --fix",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [
+    "polly",
+    "resilience",
+    "retry",
+    "circuit-breaker",
+    "timeout",
+    "fallback",
+    "bulkhead",
+    "typescript"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "polly-ts-core": "workspace:*",
+    "polly-ts-http": "workspace:*",
+    "polly-ts-express": "workspace:*",
+    "polly-ts-fastify": "workspace:*",
+    "polly-ts-nestjs": "workspace:*",
+    "polly-ts-hono": "workspace:*",
+    "polly-ts-redis": "workspace:*",
+    "polly-ts-telemetry": "workspace:*",
+    "polly-ts-testing": "workspace:*"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

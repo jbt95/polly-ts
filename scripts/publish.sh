@@ -76,7 +76,8 @@ PACKAGES=(
   "nestjs"
   "redis"
   "telemetry"
-  "testing"
+  "testing",
+  "polly-ts"
 )
 
 echo -e "${BLUE}======================================${NC}"
