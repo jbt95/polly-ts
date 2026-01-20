@@ -52,3 +52,19 @@ fastify.setErrorHandler((error, request, reply) => {
   }
 });
 ```
+
+## Examples
+
+### polly
+
+```typescript
+const bulkhead = new BulkheadPolicy({ maxConcurrent: 10, maxQueue: 5 });
+
+fastify.addHook('onRequest', polly(bulkhead));
+```
+
+## API Reference
+
+| API     | Kind     | Description                                                    | Example                                        |
+| ------- | -------- | -------------------------------------------------------------- | ---------------------------------------------- |
+| `polly` | Function | Fastify hook wrapper that runs requests inside a Polly policy. | `fastify.addHook('onRequest', polly(policy));` |

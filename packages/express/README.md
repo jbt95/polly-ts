@@ -53,3 +53,31 @@ app.use((err, req, res, next) => {
   }
 });
 ```
+
+## Examples
+
+### polly
+
+```typescript
+const breaker = new CircuitBreakerPolicy({ failureThreshold: 3, breakDuration: 30000 });
+
+app.get('/api/data', polly(breaker), async (req, res) => {
+  res.json({ ok: true });
+});
+```
+
+### POLLY_CONTEXT
+
+```typescript
+app.use((req, _res, next) => {
+  req[POLLY_CONTEXT] = { operation: 'get-users' };
+  next();
+});
+```
+
+## API Reference
+
+| API             | Kind     | Description                                                       | Example                                           |
+| --------------- | -------- | ----------------------------------------------------------------- | ------------------------------------------------- |
+| `polly`         | Function | Express middleware that executes a request inside a Polly policy. | `app.get('/path', polly(policy), handler);`       |
+| `POLLY_CONTEXT` | Constant | Symbol key for attaching Polly metadata to `req`.                 | `req[POLLY_CONTEXT] = { operation: 'get-user' };` |

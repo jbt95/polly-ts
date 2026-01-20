@@ -1,6 +1,6 @@
 {
   "name": "polly-ts-fastify",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Fastify integration for Polly-TS",
   "type": "module",
   "main": "./dist/index.js",

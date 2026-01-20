@@ -16,7 +16,13 @@ export { PolicyEventEmitter } from './types/index';
 export { createExecutionContext } from './types/context';
 
 // Errors
-export { PolicyError, TimeoutError, CircuitOpenError, BulkheadRejectedError } from './errors/index';
+export {
+  PolicyError,
+  TimeoutError,
+  CircuitOpenError,
+  BulkheadRejectedError,
+  RateLimitRejectedError,
+} from './errors/index';
 
 // Policies
 export {
@@ -29,6 +35,11 @@ export {
   CircuitBreakerPolicy,
   FallbackPolicy,
   BulkheadPolicy,
+  CachePolicy,
+  MemoryCacheProvider,
+  HedgingPolicy,
+  RateLimiterPolicy,
+  TokenBucketStrategy,
   PolicyWrap,
   pipeline,
   MemoryStateStore,
@@ -59,5 +70,14 @@ export type {
   FallbackEventArgs,
   BulkheadPolicyOptions,
   BulkheadRejectEventArgs,
+  CachePolicyOptions,
+  CacheHitEventArgs,
+  CacheMissEventArgs,
+  ICacheProvider,
+  HedgingPolicyOptions,
+  HedgeEventArgs,
+  RateLimiterPolicyOptions,
+  IRateLimiterStrategy,
+  TokenBucketOptions,
   CircuitBreakerStateStore,
 } from './policies/index';

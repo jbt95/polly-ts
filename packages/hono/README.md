@@ -31,3 +31,19 @@ app.get('/api/data', async (c) => {
 
 export default app;
 ```
+
+## Examples
+
+### polly
+
+```typescript
+const timeout = new TimeoutPolicy({ timeoutMs: 2000 });
+
+app.use('/api/*', polly(timeout));
+```
+
+## API Reference
+
+| API     | Kind     | Description                                                   | Example                             |
+| ------- | -------- | ------------------------------------------------------------- | ----------------------------------- |
+| `polly` | Function | Hono middleware that executes requests inside a Polly policy. | `app.use('/api/*', polly(policy));` |

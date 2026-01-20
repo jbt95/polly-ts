@@ -1,6 +1,6 @@
 {
   "name": "polly-ts-http",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "HTTP fetch wrapper for Polly-TS",
   "type": "module",
   "main": "./dist/index.js",

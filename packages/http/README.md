@@ -50,3 +50,35 @@ const fetchWithTimeout = pollyFetch(timeout);
 
 await fetchWithTimeout('https://slow-api.com'); // Aborts if > 1s
 ```
+
+## Examples
+
+### pollyFetch
+
+```typescript
+const retry = new RetryPolicy({ maxAttempts: 3 });
+const resilientFetch = pollyFetch(retry, {
+  shouldFail: (res) => res.status >= 500,
+});
+```
+
+### HttpError
+
+```typescript
+const resilientFetch = pollyFetch(retry);
+
+try {
+  await resilientFetch('https://api.example.com/data');
+} catch (err) {
+  if (err instanceof HttpError) {
+    console.error('Status', err.response.status);
+  }
+}
+```
+
+## API Reference
+
+| API          | Kind        | Description                                                 | Example                                               |
+| ------------ | ----------- | ----------------------------------------------------------- | ----------------------------------------------------- |
+| `pollyFetch` | Function    | Wraps `fetch` with a Polly policy for resilient HTTP calls. | `const resilientFetch = pollyFetch(retry);`           |
+| `HttpError`  | Error class | Error thrown when a response matches the failure predicate. | `if (err instanceof HttpError) handle(err.response);` |

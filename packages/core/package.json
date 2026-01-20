@@ -1,6 +1,6 @@
 {
   "name": "polly-ts-core",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A comprehensive resilience and transient fault handling library for TypeScript",
   "type": "module",
   "main": "./dist/index.cjs",

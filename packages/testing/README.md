@@ -1,6 +1,6 @@
 # Testing Package
 
-The `@polly-ts/testing` package provides utilities for testing resilience policies in your applications. It is part of the Polly-TS library, a comprehensive resilience and transient fault handling library for TypeScript/Node.js.
+The `polly-ts-testing` package provides utilities for testing resilience policies in your applications. It is part of the Polly-TS library, a comprehensive resilience and transient fault handling library for TypeScript/Node.js.
 
 ## Features
 
@@ -13,71 +13,66 @@ The `@polly-ts/testing` package provides utilities for testing resilience polici
 Install the package using pnpm:
 
 ```bash
-pnpm add @polly-ts/testing
+pnpm add polly-ts-testing
 ```
 
 ## Usage
 
 ### Chaos Policy
 
-The `ChaosPolicy` allows you to simulate random failures in your application to test its resilience.
+The `ChaosPolicy` allows you to simulate random failures or latency to test resilience.
 
 ```typescript
-import { ChaosPolicy } from '@polly-ts/testing';
+import { ChaosPolicy } from 'polly-ts-testing';
 
 const chaosPolicy = new ChaosPolicy({
-  failureRate: 0.3, // 30% chance of failure
+  injectionRate: 0.3, // 30% chance of fault injection
+  latencyMs: 150, // Optional latency injection
 });
 
-chaosPolicy.execute(() => {
+await chaosPolicy.execute(() => {
   console.log('This might fail!');
 });
 ```
 
-### Testing Policies
+### Composing With Core Policies
 
-Use the utilities in this package to test your Polly-TS policies under various conditions.
+Combine `ChaosPolicy` with core policies to test complex behavior.
 
 ```typescript
-import { RetryPolicy } from '@polly-ts/core';
-import { ChaosPolicy } from '@polly-ts/testing';
+import { ChaosPolicy } from 'polly-ts-testing';
+import { RetryPolicy, pipeline } from 'polly-ts-core';
 
-// Create a RetryPolicy
-const retryPolicy = new RetryPolicy({
-  retries: 3,
-});
+const chaos = new ChaosPolicy({ injectionRate: 0.5 });
+const retry = new RetryPolicy({ maxAttempts: 3 });
+const strategy = pipeline(chaos, retry);
 
-// Wrap the RetryPolicy with a ChaosPolicy for testing
-const chaosPolicy = new ChaosPolicy({
-  failureRate: 0.5, // 50% chance of failure
-});
-
-const combinedPolicy = chaosPolicy.wrap(retryPolicy);
-
-// Execute a test action
-combinedPolicy.execute(async () => {
-  console.log('Attempting operation...');
+await strategy.execute(async () => {
   // Simulate an operation that might fail
   if (Math.random() < 0.7) {
     throw new Error('Simulated failure');
   }
-  console.log('Operation succeeded');
+  return 'ok';
 });
 ```
 
-## Contributing
+## Examples
 
-We welcome contributions! Please follow these steps:
+### ChaosPolicy
 
-1. Fork the repository.
-2. Create a new branch for your feature or bugfix.
-3. Write tests and ensure all existing tests pass.
-4. Submit a pull request.
+```typescript
+const chaos = new ChaosPolicy({
+  injectionRate: 0.2,
+  fault: new Error('Injected failure'),
+});
 
-## License
+await chaos.execute(async () => {
+  return 'ok';
+});
+```
 
-This project is licensed under the MIT License. See the LICENSE file for details.
+## API Reference
 
----
-
-For more information, visit the [Polly-TS GitHub repository](https://github.com/jbt95/polly-ts).
+| API           | Kind  | Description                                   | Example                                                  |
+| ------------- | ----- | --------------------------------------------- | -------------------------------------------------------- |
+| `ChaosPolicy` | Class | Injects faults and latency for chaos testing. | `const chaos = new ChaosPolicy({ injectionRate: 0.2 });` |

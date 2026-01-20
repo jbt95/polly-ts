@@ -398,3 +398,90 @@ pnpm lint
 ## License
 
 MIT
+
+## API Reference
+
+Public API exported by `polly-ts-core`.
+
+| API | Kind | Description | Example |
+| --- | --- | --- | --- |
+| `PolicyEventEmitter` | Class | Emits policy lifecycle events and lets subscribers listen safely. | `const emitter = new PolicyEventEmitter<{ value: number }>();` |
+| `createExecutionContext` | Function | Builds an `ExecutionContext` with defaults and optional overrides. | `const ctx = createExecutionContext({ operationKey: 'fetch-user' });` |
+| `PolicyError` | Error class | Base error type for policy-specific failures. | `if (err instanceof PolicyError) handle(err);` |
+| `TimeoutError` | Error class | Indicates a timeout policy exceeded its configured time limit. | `if (err instanceof TimeoutError) retryLater();` |
+| `CircuitOpenError` | Error class | Indicates a circuit breaker is open and rejecting executions. | `if (err instanceof CircuitOpenError) queue();` |
+| `BulkheadRejectedError` | Error class | Indicates a bulkhead policy rejected execution due to limits. | `if (err instanceof BulkheadRejectedError) throttle();` |
+| `RateLimitRejectedError` | Error class | Indicates a rate limiter rejected execution when no permits were available. | `if (err instanceof RateLimitRejectedError) backoff();` |
+| `RetryPolicy` | Class | Retries failed operations based on error/result predicates. | `const retry = new RetryPolicy({ maxAttempts: 3 });` |
+| `ConstantBackoff` | Class | Retry backoff strategy with a fixed delay between attempts. | `new ConstantBackoff({ delay: 200 });` |
+| `ExponentialBackoff` | Class | Retry backoff strategy with exponential delay growth. | `new ExponentialBackoff({ initialDelay: 100 });` |
+| `ExponentialBackoffWithJitter` | Class | Exponential backoff with jitter to avoid synchronized retries. | `new ExponentialBackoffWithJitter({ jitter: 'full' });` |
+| `CustomBackoff` | Class | Backoff strategy powered by a user-supplied delay function. | `new CustomBackoff((attempt) => attempt * 250);` |
+| `TimeoutPolicy` | Class | Enforces time limits with optimistic or pessimistic cancellation. | `const timeout = new TimeoutPolicy({ timeoutMs: 1000 });` |
+| `CircuitBreakerPolicy` | Class | Fails fast after thresholds and recovers after a break duration. | `const breaker = new CircuitBreakerPolicy({ failureThreshold: 5 });` |
+| `FallbackPolicy` | Class | Provides fallback values or actions when failures occur. | `new FallbackPolicy({ fallback: () => 'default' });` |
+| `BulkheadPolicy` | Class | Limits concurrency and optional queueing to protect resources. | `new BulkheadPolicy({ maxConcurrent: 5, maxQueue: 10 });` |
+| `CachePolicy` | Class | Caches successful results with TTL and key generation. | `new CachePolicy({ ttlMs: 60000, keyGenerator: () => 'key' });` |
+| `MemoryCacheProvider` | Class | In-memory cache provider for CachePolicy. | `const provider = new MemoryCacheProvider();` |
+| `HedgingPolicy` | Class | Runs parallel attempts to reduce tail latency. | `new HedgingPolicy({ delayMs: 100, maxHedges: 1 });` |
+| `RateLimiterPolicy` | Class | Limits operation rate using a strategy such as token bucket. | `new RateLimiterPolicy({ strategy });` |
+| `TokenBucketStrategy` | Class | Token bucket rate limiting strategy. | `new TokenBucketStrategy({ capacity: 100, refillRate: 100 });` |
+| `PolicyWrap` | Class | Wraps one policy around another to compose strategies. | `const wrapped = new PolicyWrap(retry, timeout);` |
+| `pipeline` | Function | Composes multiple policies into a single execution pipeline. | `const combined = pipeline(retry, timeout);` |
+| `MemoryStateStore` | Class | In-memory circuit breaker state store for single-process apps. | `const store = new MemoryStateStore(5, 30000, 2);` |
+
+## Package API Index
+
+### polly-ts-http
+
+| API | Kind | Description | Example |
+| --- | --- | --- | --- |
+| `pollyFetch` | Function | Wraps `fetch` with a Polly policy for resilient HTTP calls. | `const resilientFetch = pollyFetch(retry);` |
+| `HttpError` | Error class | Error thrown when a response matches the failure predicate. | `if (err instanceof HttpError) handle(err.response);` |
+
+### polly-ts-express
+
+| API | Kind | Description | Example |
+| --- | --- | --- | --- |
+| `polly` | Function | Express middleware that executes a request inside a Polly policy. | `app.get('/path', polly(policy), handler);` |
+| `POLLY_CONTEXT` | Constant | Symbol key for attaching Polly metadata to `req`. | `req[POLLY_CONTEXT] = { operation: 'get-user' };` |
+
+### polly-ts-fastify
+
+| API | Kind | Description | Example |
+| --- | --- | --- | --- |
+| `polly` | Function | Fastify hook wrapper that runs requests inside a Polly policy. | `fastify.addHook('onRequest', polly(policy));` |
+
+### polly-ts-nestjs
+
+| API | Kind | Description | Example |
+| --- | --- | --- | --- |
+| `PollyModule` | Class | NestJS module that registers policies and the global interceptor. | `PollyModule.register({ policies: [{ name: 'retry', useValue: retry }] });` |
+| `PollyInterceptor` | Class | Interceptor that runs handlers inside the selected policy. | `providers: [{ provide: APP_INTERCEPTOR, useClass: PollyInterceptor }]` |
+| `UsePolicy` | Decorator | Attaches a policy name to a controller or method. | `@UsePolicy('retry')` |
+| `POLLY_POLICY_KEY` | Constant | Metadata key used to store the policy name. | `SetMetadata(POLLY_POLICY_KEY, 'retry');` |
+
+### polly-ts-hono
+
+| API | Kind | Description | Example |
+| --- | --- | --- | --- |
+| `polly` | Function | Hono middleware that executes requests inside a Polly policy. | `app.use('/api/*', polly(policy));` |
+
+### polly-ts-redis
+
+| API | Kind | Description | Example |
+| --- | --- | --- | --- |
+| `RedisStateStore` | Class | Redis-backed circuit breaker state store for distributed coordination. | `const store = new RedisStateStore({ client: redis, name: 'billing', failThreshold: 5, breakDuration: 30000, successThreshold: 2 });` |
+
+### polly-ts-telemetry
+
+| API | Kind | Description | Example |
+| --- | --- | --- | --- |
+| `TelemetryPolicy` | Class | Wraps another policy and records OpenTelemetry metrics and spans. | `const observed = new TelemetryPolicy(retry, { tracer: 'svc', meter: 'svc' });` |
+| `VERSION` | Constant | Package version string used for telemetry instrumentation. | `console.log(VERSION);` |
+
+### polly-ts-testing
+
+| API | Kind | Description | Example |
+| --- | --- | --- | --- |
+| `ChaosPolicy` | Class | Injects faults and latency for chaos testing. | `const chaos = new ChaosPolicy({ injectionRate: 0.2 });` |

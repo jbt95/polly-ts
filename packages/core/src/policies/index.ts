@@ -3,4 +3,7 @@ export * from './timeout';
 export * from './circuit-breaker';
 export * from './fallback';
 export * from './bulkhead';
+export * from './cache';
+export * from './hedging';
+export * from './rate-limiter';
 export * from './wrap';
